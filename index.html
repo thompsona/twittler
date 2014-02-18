@@ -11,14 +11,28 @@
         var $body = $('body');
         $body.html('');
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
+        var $alltweets = $('<div style="height:300px; width: 100%; overflow: scroll"></div>');
+        var index = streams.home.length;
+        for(var i = 0; i < index; ++i) {
+          var tweet = streams.home[i];
           var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
+          $tweet.text(tweet.created_at + ': @' + tweet.user + ': ' + tweet.message);
+          $alltweets.append($tweet);
         }
+        $alltweets.appendTo($body);
+
+        setInterval(function() {
+          var newIndex = streams.home.length-1;
+          console.log("index: " + index);
+          console.log("new: " + newIndex);
+            for(var i = index; i < newIndex; ++i) {
+              var tweet = streams.home[i];
+              var $tweet = $('<div></div>');
+              $tweet.text(tweet.created_at + ': @' + tweet.user + ': ' + tweet.message);
+              $alltweets.prepend($tweet);
+            }
+          index = newIndex;
+        }, 5000);
 
       });
 
